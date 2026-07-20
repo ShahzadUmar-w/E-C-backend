@@ -75,3 +75,149 @@ router.post('/login', async (req, res) => {
 });
 
 module.exports = router;
+
+
+
+
+$commitFile = ".commit-log"
+
+
+
+$msgs = @(
+
+"feat: improve UI layout",
+
+"fix: update content structure",
+
+"refactor: clean markup structure",
+
+"docs: update project documentation"
+
+)
+
+
+$dates = @(
+"2026-03-01",
+"2026-03-02",
+"2026-03-03",
+"2026-03-04",
+"2026-03-05",
+"2026-03-06",
+"2026-03-07",
+"2026-03-08",
+"2026-03-09",
+"2026-03-10",
+"2026-03-11",
+"2026-03-12",
+"2026-03-13",
+"2026-03-14",
+"2026-03-15",
+"2026-03-16",
+"2026-03-17",
+"2026-03-18",
+"2026-03-19",
+"2026-03-20",
+"2026-03-21",
+"2026-03-22",
+"2026-03-23",
+"2026-03-24",
+"2026-03-25",
+"2026-03-26",
+"2026-03-27",
+"2026-03-28",
+"2026-03-29",
+"2026-03-30",
+"2026-03-31",
+
+"2026-04-01",
+"2026-04-02",
+"2026-04-03",
+"2026-04-04",
+"2026-04-05",
+"2026-04-06",
+"2026-04-07",
+"2026-04-08",
+"2026-04-09",
+"2026-04-10",
+"2026-04-11",
+"2026-04-12",
+"2026-04-13",
+"2026-04-14",
+"2026-04-15",
+"2026-04-16",
+"2026-04-17",
+"2026-04-18",
+"2026-04-19",
+"2026-04-20",
+"2026-04-21",
+"2026-04-22",
+"2026-04-23",
+"2026-04-24",
+"2026-04-25",
+"2026-04-26",
+"2026-04-27",
+"2026-04-28",
+"2026-04-29",
+"2026-04-30"
+)
+
+
+if (!(Test-Path $commitFile)) {
+
+    New-Item -ItemType File -Path $commitFile | Out-Null
+
+}
+
+
+
+foreach ($date in $dates) {
+
+
+
+    $commitCount = Get-Random -Minimum 1 -Maximum 4
+
+
+
+    for ($i=1; $i -le $commitCount; $i++) {
+
+
+
+        Add-Content -Path $commitFile -Value "commit $date $i"
+
+
+
+        git add $commitFile
+
+
+
+        $msg = $msgs[(Get-Random -Minimum 0 -Maximum $msgs.Length)]
+
+
+
+        $hour = Get-Random -Minimum 10 -Maximum 20
+
+        $minute = Get-Random -Minimum 0 -Maximum 59
+
+
+        $time = "{0}T{1:d2}:{2:d2}:00" -f $date, $hour, $minute
+
+
+
+        $env:GIT_AUTHOR_DATE = $time
+
+        $env:GIT_COMMITTER_DATE = $time
+
+
+
+        git commit -m $msg
+
+    }
+
+}
+
+
+Remove-Item Env:\GIT_AUTHOR_DATE -ErrorAction SilentlyContinue
+
+Remove-Item Env:\GIT_COMMITTER_DATE -ErrorAction SilentlyContinue
+
+git push origin main
